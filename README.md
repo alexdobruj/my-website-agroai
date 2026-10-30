@@ -42,4 +42,4 @@ ADMIN_TOKEN=secret BUYER_INVITE_CODES=demo-buyer-2026 npm start
 - Хранилище — JSON-файл; для продакшена заменить на Postgres.
 - Доступ по общему токену/инвайт-коду, без личных кабинетов.
 - Нет уведомлений на email — заявки смотрим в `/admin`.
-- Домен и email пока заглушки (`hello@agroai.example` в `BRAND`).
+- Домен: **agroai.com** (canonical, hreflang, `sitemap.xml`, `robots.txt` уже прописаны), почта `hello@agroai.com` — ящик нужно создать.

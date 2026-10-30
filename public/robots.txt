@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /market
+Disallow: /en/market
+Disallow: /api/
+
+Sitemap: https://agroai.com/sitemap.xml

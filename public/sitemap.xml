@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://agroai.com/</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/it</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/it"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/it"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/it"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/en/it</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/it"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/it"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/it"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/agro</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/agro"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/agro"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/agro"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/en/agro</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/agro"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/agro"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/agro"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/join</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/join"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/join"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/join"/>
+  </url>
+  <url>
+    <loc>https://agroai.com/en/join</loc>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agroai.com/join"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agroai.com/en/join"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agroai.com/join"/>
+  </url>
+</urlset>

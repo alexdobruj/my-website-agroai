@@ -1,7 +1,7 @@
 // Общие шапка/подвал, переключатель языка, словари и отправка форм.
 // Язык страницы берётся из <html lang>: uk — корень сайта, en — раздел /en/.
 // BRAND — рабочее название и контакты, меняются в одном месте.
-const BRAND = { name: 'AgroAI', suffix: 'Holding', email: 'hello@agroai.example' };
+const BRAND = { name: 'AgroAI', suffix: 'Holding', email: 'hello@agroai.com', domain: 'agroai.com' };
 
 const LANG = document.documentElement.lang === 'en' ? 'en' : 'uk';
 const PREFIX = LANG === 'en' ? '/en' : '';
