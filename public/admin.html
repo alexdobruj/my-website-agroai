@@ -89,10 +89,10 @@
     let head = [];
     let body = [];
     if (tab === 'farmers') {
-      head = ['Дата', 'Код', 'Хозяйство', 'Контакт', 'Страна', 'Сертификаты', 'Цели', 'Статус'];
+      head = ['Дата', 'Код', 'Хозяйство', 'Контакт', 'Область', 'Сертификаты', 'Цели', 'Статус'];
       body = rows.map((f) => [fmtDate(f.createdAt), f.supplierCode, [el('b', {}, f.company), el('div', { class: 'muted' }, f.hectares ? `${f.hectares} га · учёт: ${f.hasErp}` : `учёт: ${f.hasErp}`)],
         [f.contactName, el('div', { class: 'muted' }, f.email), el('div', { class: 'muted' }, f.phone)],
-        [f.country, f.region].filter(Boolean).join(', '),
+        LABELS.region[f.region] || f.region || f.country,
         f.certifications.map((c) => LABELS.cert[c] || c).join(', ') || '—',
         f.goals.join(', ') || '—', statusSelect('farmers', f)]);
     } else if (tab === 'requests') {
@@ -107,9 +107,9 @@
           r.quantity || '—', r.destination || '—', r.message || '—', statusSelect('requests', r)];
       });
     } else if (tab === 'leads') {
-      head = ['Дата', 'Имя', 'Компания', 'Контакты', 'Направление', 'Сообщение', 'Статус'];
+      head = ['Дата', 'Имя', 'Компания', 'Контакты', 'Направление', 'Язык', 'Сообщение', 'Статус'];
       body = rows.map((l) => [fmtDate(l.createdAt), l.name, l.company || '—',
-        [l.email, el('div', { class: 'muted' }, l.phone)], l.direction, l.message || '—', statusSelect('leads', l)]);
+        [l.email, el('div', { class: 'muted' }, l.phone)], l.direction, l.lang || 'uk', l.message || '—', statusSelect('leads', l)]);
     } else {
       const farmers = farmerById();
       head = ['Продукт', 'Категория', 'Объём', 'Сезон', 'Хозяйство', 'Статус хозяйства'];

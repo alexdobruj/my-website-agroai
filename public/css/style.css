@@ -220,3 +220,11 @@ tr:last-child td { border-bottom: 0; }
   .nav.open { display: flex; }
   .cta-band { padding: 28px; }
 }
+
+/* language switch */
+.lang-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.lang-switch a { padding: 4px 9px; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.lang-switch a.active { background: var(--green-700); color: #fff; }
+
+[hidden] { display: none !important; }
+.nav a.btn-primary, .nav a.btn-primary:hover { color: #fff; }

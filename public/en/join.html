@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grower registration — AgroAI Holding</title>
+  <meta name="description" content="Register your farm in the AgroAI grower network: access to EU buyers, marketplaces and our closed B2B platform.">
+  <link rel="alternate" hreflang="uk" href="/join">
+  <link rel="alternate" hreflang="en" href="/en/join">
+  <link rel="alternate" hreflang="x-default" href="/join">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container" style="max-width:920px">
+    <div class="section-head">
+      <span class="eyebrow">Grower network</span>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Register your farm</h1>
+      <p class="lead">Once verified, your offers appear on our closed platform for wholesale buyers. Buyers don't see your contact details — all requests come through us.</p>
+    </div>
+
+    <form id="farmer-form" class="form">
+      <input type="hidden" name="country" value="Ukraine">
+      <fieldset>
+        <legend>Farm</legend>
+        <div class="form">
+          <div class="form-row">
+            <div><label for="f-company">Farm / company name *</label><input id="f-company" name="company" required maxlength="150"></div>
+            <div><label for="f-contact">Contact person *</label><input id="f-contact" name="contactName" required maxlength="100"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="f-email">Email *</label><input id="f-email" name="email" type="email" required maxlength="150"></div>
+            <div><label for="f-phone">Phone / Viber / WhatsApp</label><input id="f-phone" name="phone" maxlength="40"></div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="f-region">Region (oblast)</label>
+              <select id="f-region" name="region" data-regions><option value="">— select —</option></select>
+            </div>
+            <div><label for="f-ha">Area, ha</label><input id="f-ha" name="hectares" type="number" min="0"></div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="f-export">Export experience</label>
+              <select id="f-export" name="exportExperience">
+                <option value="none">None</option>
+                <option value="some">Occasional shipments</option>
+                <option value="regular">Regular exporter</option>
+              </select>
+            </div>
+            <div>
+              <label for="f-erp">How do you keep records</label>
+              <select id="f-erp" name="hasErp">
+                <option value="none">On paper / no system</option>
+                <option value="excel">Excel / Google Sheets</option>
+                <option value="erp">Accounting or ERP system</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label>Certificates</label>
+            <div class="checks">
+              <label><input type="checkbox" name="certifications" value="globalgap"> GlobalG.A.P.</label>
+              <label><input type="checkbox" name="certifications" value="organic"> Organic (EU)</label>
+              <label><input type="checkbox" name="certifications" value="haccp"> HACCP</label>
+              <label><input type="checkbox" name="certifications" value="iso22000"> ISO 22000</label>
+              <label><input type="checkbox" name="certifications" value="brc"> BRC</label>
+              <label><input type="checkbox" name="certifications" value="ifs"> IFS</label>
+              <label><input type="checkbox" name="certifications" value="halal"> Halal</label>
+              <label><input type="checkbox" name="certifications" value="kosher"> Kosher</label>
+              <label><input type="checkbox" name="certifications" value="fda"> FDA registration</label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Products</legend>
+        <div id="products"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="add-product">+ Add product</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>What you're interested in</legend>
+        <div class="checks">
+          <label><input type="checkbox" name="goals" value="export"> Export to the EU / worldwide</label>
+          <label><input type="checkbox" name="goals" value="marketplaces"> Selling on Amazon / marketplaces</label>
+          <label><input type="checkbox" name="goals" value="b2b"> Wholesale buyers</label>
+          <label><input type="checkbox" name="goals" value="erp"> Record-keeping / ERP</label>
+          <label><input type="checkbox" name="goals" value="certification"> Certification</label>
+          <label><input type="checkbox" name="goals" value="financing"> Financing / grants</label>
+        </div>
+        <div style="margin-top:16px"><label for="f-comment">Comment</label><textarea id="f-comment" name="comment" maxlength="2000"></textarea></div>
+      </fieldset>
+
+      <div class="checks"><label><input type="checkbox" name="consent" required> I agree to the processing of my personal data for matching with buyers and contacting me *</label></div>
+      <button class="btn btn-primary" type="submit">Submit</button>
+      <div class="form-msg" role="status"></div>
+    </form>
+  </div>
+</main>
+
+<template id="product-tpl">
+  <div class="product-row">
+    <div><label>Product *</label><input name="product" maxlength="100" placeholder="e.g. walnuts"></div>
+    <div>
+      <label>Category</label>
+      <select name="category">
+        <option value="grain">Grain</option>
+        <option value="oilseeds">Oilseeds</option>
+        <option value="fruits">Fruits & berries</option>
+        <option value="vegetables">Vegetables</option>
+        <option value="nuts">Nuts</option>
+        <option value="dried">Dried fruits</option>
+        <option value="honey">Honey</option>
+        <option value="oil">Oils</option>
+        <option value="wine">Wine</option>
+        <option value="processed">Processed (canned, juices…)</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div><label>Volume / year</label><input name="volume" type="number" min="0" step="any"></div>
+    <div>
+      <label>Unit</label>
+      <select name="unit"><option value="t">t</option><option value="kg">kg</option><option value="l">l</option><option value="pcs">pcs</option></select>
+    </div>
+    <div><label>Season</label><input name="season" maxlength="60" placeholder="Sep–Nov"></div>
+    <button type="button" class="remove" title="Remove">✕</button>
+  </div>
+</template>
+
+<footer id="site-footer"></footer>
+<script src="/js/main.js"></script>
+<script src="/js/join.js"></script>
+</body>
+</html>

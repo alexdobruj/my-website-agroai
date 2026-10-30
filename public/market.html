@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="ru">
+<html lang="uk">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Закрытый маркетплейс — AgroAI Holding</title>
+  <title>Закритий маркетплейс — AgroAI Holding</title>
   <meta name="robots" content="noindex">
+  <link rel="alternate" hreflang="uk" href="/market">
+  <link rel="alternate" hreflang="en" href="/en/market">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
@@ -15,52 +17,52 @@
 <main class="section">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Только по приглашению</span>
-      <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Закрытый маркетплейс аграриев</h1>
-      <p class="lead">Проверенные поставщики с документами. Контакты раскрываются после того, как холдинг подтвердит запрос.</p>
+      <span class="eyebrow">Лише за запрошенням</span>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Закритий маркетплейс аграріїв</h1>
+      <p class="lead">Перевірені українські постачальники з документами. Контакти розкриваються після того, як холдинг підтвердить запит.</p>
     </div>
 
     <form id="login" class="card form" style="max-width:460px">
-      <div><label for="invite">Инвайт-код покупателя</label><input id="invite" required autocomplete="off"></div>
-      <button class="btn btn-primary" type="submit">Войти</button>
+      <div><label for="invite">Інвайт-код покупця</label><input id="invite" required autocomplete="off"></div>
+      <button class="btn btn-primary" type="submit">Увійти</button>
       <div class="form-msg" role="status"></div>
-      <p class="muted" style="margin:0">Нет кода? <a href="/#contact">Запросите доступ</a> — мы проверяем каждого покупателя.</p>
+      <p class="muted" style="margin:0">Немає коду? <a href="/#contact">Запросіть доступ</a> — ми перевіряємо кожного покупця.</p>
     </form>
 
     <div id="catalog" hidden>
       <div class="toolbar">
-        <input id="q" placeholder="Поиск по продукту">
-        <select id="cat"><option value="">Все категории</option></select>
-        <select id="country"><option value="">Все страны</option></select>
-        <button class="btn btn-ghost btn-sm" id="logout" type="button">Выйти</button>
+        <input id="q" placeholder="Пошук за продуктом">
+        <select id="cat"></select>
+        <select id="region"></select>
+        <button class="btn btn-ghost btn-sm" id="logout" type="button">Вийти</button>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Продукт</th><th>Категория</th><th>Объём / год</th><th>Сезон</th><th>Поставщик</th><th>Происхождение</th><th>Сертификаты</th><th></th></tr></thead>
+          <thead><tr><th>Продукт</th><th>Категорія</th><th>Обсяг / рік</th><th>Сезон</th><th>Постачальник</th><th>Регіон</th><th>Сертифікати</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <p class="muted" id="empty" hidden style="margin-top:16px">Пока нет предложений по выбранным фильтрам.</p>
+      <p class="muted" id="empty" hidden style="margin-top:16px">Поки немає пропозицій за обраними фільтрами.</p>
     </div>
   </div>
 </main>
 
 <div class="modal" id="modal">
   <form class="card form" id="request-form">
-    <h3 id="req-title">Запрос</h3>
+    <h3 id="req-title">Запит</h3>
     <div class="form-row">
-      <div><label for="r-name">Имя *</label><input id="r-name" name="buyerName" required maxlength="100"></div>
-      <div><label for="r-company">Компания *</label><input id="r-company" name="buyerCompany" required maxlength="150"></div>
+      <div><label for="r-name">Ім'я *</label><input id="r-name" name="buyerName" required maxlength="100"></div>
+      <div><label for="r-company">Компанія *</label><input id="r-company" name="buyerCompany" required maxlength="150"></div>
     </div>
     <div class="form-row">
       <div><label for="r-email">Email *</label><input id="r-email" name="buyerEmail" type="email" required maxlength="150"></div>
-      <div><label for="r-qty">Нужный объём</label><input id="r-qty" name="quantity" maxlength="60" placeholder="напр. 20 т / мес"></div>
+      <div><label for="r-qty">Потрібний обсяг</label><input id="r-qty" name="quantity" maxlength="60" placeholder="напр. 20 т / міс"></div>
     </div>
-    <div><label for="r-dest">Страна / порт назначения</label><input id="r-dest" name="destination" maxlength="100"></div>
-    <div><label for="r-msg">Требования (упаковка, качество, сроки)</label><textarea id="r-msg" name="message" maxlength="2000"></textarea></div>
+    <div><label for="r-dest">Країна / пункт призначення</label><input id="r-dest" name="destination" maxlength="100"></div>
+    <div><label for="r-msg">Вимоги (пакування, якість, терміни)</label><textarea id="r-msg" name="message" maxlength="2000"></textarea></div>
     <div class="btn-row">
-      <button class="btn btn-primary" type="submit">Отправить запрос</button>
-      <button class="btn btn-ghost" type="button" id="close-modal">Отмена</button>
+      <button class="btn btn-primary" type="submit">Надіслати запит</button>
+      <button class="btn btn-ghost" type="button" id="close-modal">Скасувати</button>
     </div>
     <div class="form-msg" role="status"></div>
   </form>
@@ -68,96 +70,6 @@
 
 <footer id="site-footer"></footer>
 <script src="/js/main.js"></script>
-<script>
-  const KEY = 'agroai-invite';
-  let invite = '';
-  try { invite = sessionStorage.getItem(KEY) || ''; } catch (e) {}
-  let offers = [];
-  let currentOffer = null;
-
-  const $ = (id) => document.getElementById(id);
-
-  async function loadOffers() {
-    const res = await fetch('/api/market/offers', { headers: { 'X-Invite-Code': invite } });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(body.error || 'Ошибка загрузки');
-    offers = body.offers;
-    fillFilters();
-    render();
-    $('login').hidden = true;
-    $('catalog').hidden = false;
-  }
-
-  function fillFilters() {
-    const cats = [...new Set(offers.map((o) => o.category))];
-    const countries = [...new Set(offers.map((o) => o.country))].sort();
-    $('cat').replaceChildren(el('option', { value: '' }, 'Все категории'),
-      ...cats.map((c) => el('option', { value: c }, LABELS.category[c] || c)));
-    $('country').replaceChildren(el('option', { value: '' }, 'Все страны'),
-      ...countries.map((c) => el('option', { value: c }, c)));
-  }
-
-  function render() {
-    const q = $('q').value.trim().toLowerCase();
-    const cat = $('cat').value;
-    const country = $('country').value;
-    const list = offers.filter((o) =>
-      (!q || o.product.toLowerCase().includes(q)) && (!cat || o.category === cat) && (!country || o.country === country));
-    $('rows').replaceChildren(...list.map((o) => el('tr', {},
-      el('td', {}, el('b', {}, o.product)),
-      el('td', {}, LABELS.category[o.category] || o.category),
-      el('td', {}, o.volume ? `${o.volume} ${LABELS.unit[o.unit] || o.unit}` : '—'),
-      el('td', {}, o.season || '—'),
-      el('td', {}, el('span', { class: 'tag' }, o.supplier), el('div', { class: 'muted' }, LABELS.exportExperience[o.exportExperience] || '')),
-      el('td', {}, [o.country, o.region].filter(Boolean).join(', ')),
-      el('td', {}, o.certifications.length ? o.certifications.map((c) => el('span', { class: 'tag tag--wheat' }, LABELS.cert[c] || c)) : '—'),
-      el('td', {}, el('button', { class: 'btn btn-primary btn-sm', type: 'button', onclick: () => openRequest(o) }, 'Запросить')),
-    )));
-    $('empty').hidden = list.length > 0;
-  }
-
-  function openRequest(o) {
-    currentOffer = o;
-    $('req-title').textContent = `Запрос: ${o.product} (${o.supplier})`;
-    $('request-form').querySelector('.form-msg').className = 'form-msg';
-    $('modal').classList.add('open');
-  }
-
-  $('close-modal').addEventListener('click', () => $('modal').classList.remove('open'));
-  ['q', 'cat', 'country'].forEach((id) => $(id).addEventListener('input', render));
-
-  $('login').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    invite = $('invite').value.trim();
-    try {
-      await loadOffers();
-      try { sessionStorage.setItem(KEY, invite); } catch (err) {}
-    } catch (err) {
-      showMsg($('login').querySelector('.form-msg'), err.message, false);
-    }
-  });
-
-  $('logout').addEventListener('click', () => {
-    try { sessionStorage.removeItem(KEY); } catch (err) {}
-    location.reload();
-  });
-
-  $('request-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const msg = form.querySelector('.form-msg');
-    try {
-      await postJSON('/api/market/requests',
-        { offerId: currentOffer.id, ...Object.fromEntries(new FormData(form)) },
-        { 'X-Invite-Code': invite });
-      form.reset();
-      showMsg(msg, 'Запрос отправлен. Менеджер холдинга свяжется с вами и поставщиком.', true);
-    } catch (err) {
-      showMsg(msg, err.message, false);
-    }
-  });
-
-  if (invite) loadOffers().catch(() => {});
-</script>
+<script src="/js/market.js"></script>
 </body>
 </html>

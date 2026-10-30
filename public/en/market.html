@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Closed marketplace — AgroAI Holding</title>
+  <meta name="robots" content="noindex">
+  <link rel="alternate" hreflang="uk" href="/market">
+  <link rel="alternate" hreflang="en" href="/en/market">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Invitation only</span>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Closed marketplace of Ukrainian growers</h1>
+      <p class="lead">Verified suppliers with documents. Contact details are shared once we confirm your request.</p>
+    </div>
+
+    <form id="login" class="card form" style="max-width:460px">
+      <div><label for="invite">Buyer invite code</label><input id="invite" required autocomplete="off"></div>
+      <button class="btn btn-primary" type="submit">Sign in</button>
+      <div class="form-msg" role="status"></div>
+      <p class="muted" style="margin:0">No code yet? <a href="/en/#contact">Request access</a> — we verify every buyer.</p>
+    </form>
+
+    <div id="catalog" hidden>
+      <div class="toolbar">
+        <input id="q" placeholder="Search products">
+        <select id="cat"></select>
+        <select id="region"></select>
+        <button class="btn btn-ghost btn-sm" id="logout" type="button">Sign out</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Volume / year</th><th>Season</th><th>Supplier</th><th>Region</th><th>Certificates</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="muted" id="empty" hidden style="margin-top:16px">No offers match the selected filters yet.</p>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="modal">
+  <form class="card form" id="request-form">
+    <h3 id="req-title">Request</h3>
+    <div class="form-row">
+      <div><label for="r-name">Name *</label><input id="r-name" name="buyerName" required maxlength="100"></div>
+      <div><label for="r-company">Company *</label><input id="r-company" name="buyerCompany" required maxlength="150"></div>
+    </div>
+    <div class="form-row">
+      <div><label for="r-email">Email *</label><input id="r-email" name="buyerEmail" type="email" required maxlength="150"></div>
+      <div><label for="r-qty">Required volume</label><input id="r-qty" name="quantity" maxlength="60" placeholder="e.g. 20 t / month"></div>
+    </div>
+    <div><label for="r-dest">Destination country / port</label><input id="r-dest" name="destination" maxlength="100"></div>
+    <div><label for="r-msg">Requirements (packaging, quality, timing)</label><textarea id="r-msg" name="message" maxlength="2000"></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" type="submit">Send request</button>
+      <button class="btn btn-ghost" type="button" id="close-modal">Cancel</button>
+    </div>
+    <div class="form-msg" role="status"></div>
+  </form>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="/js/main.js"></script>
+<script src="/js/market.js"></script>
+</body>
+</html>

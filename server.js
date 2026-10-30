@@ -33,8 +33,47 @@ function oneOf(v, allowed, fallback) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function bad(res, message) {
-  return res.status(400).json({ error: message });
+// Сообщения об ошибках на языке страницы (заголовок X-Lang: uk | en).
+const MESSAGES = {
+  uk: {
+    tooMany: 'Забагато запитів, спробуйте пізніше',
+    noAccess: 'Немає доступу',
+    badInvite: 'Невірний інвайт-код',
+    needName: "Вкажіть ім'я",
+    needContact: 'Вкажіть email або телефон',
+    needFarm: 'Вкажіть господарство та контактну особу',
+    badEmail: 'Вкажіть коректний email',
+    needCountry: 'Вкажіть країну',
+    needConsent: 'Потрібна згода на обробку персональних даних',
+    needProduct: 'Додайте хоча б один продукт',
+    noOffer: 'Пропозицію не знайдено',
+    needBuyer: "Вкажіть ім'я та компанію",
+    badStatus: 'Недопустимий статус',
+  },
+  en: {
+    tooMany: 'Too many requests, please try again later',
+    noAccess: 'Access denied',
+    badInvite: 'Invalid invite code',
+    needName: 'Please enter your name',
+    needContact: 'Please enter an email or phone number',
+    needFarm: 'Please enter the farm name and contact person',
+    badEmail: 'Please enter a valid email',
+    needCountry: 'Please enter the country',
+    needConsent: 'Consent to personal data processing is required',
+    needProduct: 'Please add at least one product',
+    noOffer: 'Offer not found',
+    needBuyer: 'Please enter your name and company',
+    badStatus: 'Invalid status',
+  },
+};
+
+function t(req, key) {
+  const lang = req.get('x-lang') === 'en' ? 'en' : 'uk';
+  return MESSAGES[lang][key];
+}
+
+function bad(req, res, key) {
+  return res.status(400).json({ error: t(req, key) });
 }
 
 // Примитивный rate-limit на POST-запросы: 20 запросов в 10 минут с одного IP.
@@ -43,7 +82,7 @@ function rateLimit(req, res, next) {
   const now = Date.now();
   const windowMs = 10 * 60 * 1000;
   const list = (hits.get(req.ip) || []).filter((t) => now - t < windowMs);
-  if (list.length >= 20) return res.status(429).json({ error: 'Слишком много запросов, попробуйте позже' });
+  if (list.length >= 20) return res.status(429).json({ error: t(req, 'tooMany') });
   list.push(now);
   hits.set(req.ip, list);
   next();
@@ -51,7 +90,7 @@ function rateLimit(req, res, next) {
 
 function requireAdmin(req, res, next) {
   if (!ADMIN_TOKEN || !safeEqual(req.get('x-admin-token') || '', ADMIN_TOKEN)) {
-    return res.status(401).json({ error: 'Нет доступа' });
+    return res.status(401).json({ error: t(req, 'noAccess') });
   }
   next();
 }
@@ -59,7 +98,7 @@ function requireAdmin(req, res, next) {
 function requireBuyer(req, res, next) {
   const code = req.get('x-invite-code') || '';
   if (!INVITE_CODES.some((c) => safeEqual(code, c))) {
-    return res.status(401).json({ error: 'Неверный инвайт-код' });
+    return res.status(401).json({ error: t(req, 'badInvite') });
   }
   req.inviteCode = code;
   next();
@@ -82,10 +121,11 @@ app.post('/api/leads', rateLimit, (req, res) => {
     company: str(b.company, 150),
     direction: oneOf(b.direction, ['erp', 'agro', 'market', 'other'], 'other'),
     message: str(b.message, 2000),
+    lang: oneOf(b.lang, ['uk', 'en'], 'uk'),
     status: 'new',
   };
-  if (!lead.name) return bad(res, 'Укажите имя');
-  if (!EMAIL_RE.test(lead.email) && !lead.phone) return bad(res, 'Укажите email или телефон');
+  if (!lead.name) return bad(req, res, 'needName');
+  if (!EMAIL_RE.test(lead.email) && !lead.phone) return bad(req, res, 'needContact');
   store.insert('leads', lead);
   res.status(201).json({ ok: true });
 });
@@ -102,7 +142,7 @@ app.post('/api/farmers', rateLimit, (req, res) => {
     contactName: str(b.contactName, 100),
     email: str(b.email, 150),
     phone: str(b.phone, 40),
-    country: str(b.country, 60),
+    country: str(b.country, 60) || 'Україна',
     region: str(b.region, 100),
     hectares: Number(b.hectares) > 0 ? Math.round(Number(b.hectares)) : null,
     certifications: Array.isArray(b.certifications) ? b.certifications.filter((c) => CERTS.includes(c)) : [],
@@ -113,12 +153,13 @@ app.post('/api/farmers', rateLimit, (req, res) => {
       : [],
     comment: str(b.comment, 2000),
     consent: b.consent === true,
+    lang: oneOf(b.lang, ['uk', 'en'], 'uk'),
     status: 'pending',
   };
-  if (!farmer.company || !farmer.contactName) return bad(res, 'Укажите хозяйство и контактное лицо');
-  if (!EMAIL_RE.test(farmer.email)) return bad(res, 'Укажите корректный email');
-  if (!farmer.country) return bad(res, 'Укажите страну');
-  if (!farmer.consent) return bad(res, 'Нужно согласие на обработку данных');
+  if (!farmer.company || !farmer.contactName) return bad(req, res, 'needFarm');
+  if (!EMAIL_RE.test(farmer.email)) return bad(req, res, 'badEmail');
+  if (!farmer.country) return bad(req, res, 'needCountry');
+  if (!farmer.consent) return bad(req, res, 'needConsent');
 
   const products = (Array.isArray(b.products) ? b.products : []).slice(0, 10).map((p) => ({
     product: str(p && p.product, 100),
@@ -128,7 +169,7 @@ app.post('/api/farmers', rateLimit, (req, res) => {
     season: str(p && p.season, 60),
     packaged: Boolean(p && p.packaged),
   })).filter((p) => p.product);
-  if (!products.length) return bad(res, 'Добавьте хотя бы один продукт');
+  if (!products.length) return bad(req, res, 'needProduct');
 
   const saved = store.insert('farmers', farmer);
   products.forEach((p) => store.insert('offers', { farmerId: saved.id, ...p }));
@@ -166,7 +207,7 @@ app.get('/api/market/offers', requireBuyer, (req, res) => {
 app.post('/api/market/requests', rateLimit, requireBuyer, (req, res) => {
   const b = req.body || {};
   const offer = store.find('offers', str(b.offerId, 60));
-  if (!offer) return bad(res, 'Предложение не найдено');
+  if (!offer) return bad(req, res, 'noOffer');
   const request = {
     offerId: offer.id,
     farmerId: offer.farmerId,
@@ -179,8 +220,8 @@ app.post('/api/market/requests', rateLimit, requireBuyer, (req, res) => {
     inviteCode: req.inviteCode,
     status: 'new',
   };
-  if (!request.buyerName || !request.buyerCompany) return bad(res, 'Укажите имя и компанию');
-  if (!EMAIL_RE.test(request.buyerEmail)) return bad(res, 'Укажите корректный email');
+  if (!request.buyerName || !request.buyerCompany) return bad(req, res, 'needBuyer');
+  if (!EMAIL_RE.test(request.buyerEmail)) return bad(req, res, 'badEmail');
   store.insert('requests', request);
   res.status(201).json({ ok: true });
 });
@@ -205,7 +246,7 @@ app.patch('/api/admin/:collection/:id', requireAdmin, (req, res) => {
   const allowed = statuses[req.params.collection];
   if (!allowed) return res.status(404).json({ error: 'Not found' });
   const status = (req.body || {}).status;
-  if (!allowed.includes(status)) return bad(res, 'Недопустимый статус');
+  if (!allowed.includes(status)) return bad(req, res, 'badStatus');
   const row = store.update(req.params.collection, req.params.id, { status });
   if (!row) return res.status(404).json({ error: 'Not found' });
   res.json(row);
