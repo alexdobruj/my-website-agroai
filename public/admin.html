@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Админка — AgroAI Holding</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <h1 style="font-size:2rem">Панель управления</h1>
+
+    <form id="login" class="card form" style="max-width:460px">
+      <div><label for="token">ADMIN_TOKEN</label><input id="token" type="password" required></div>
+      <button class="btn btn-primary" type="submit">Войти</button>
+      <div class="form-msg" role="status"></div>
+    </form>
+
+    <div id="panel" hidden>
+      <div class="tabs" id="tabs"></div>
+      <div class="table-wrap"><table id="table"></table></div>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="/js/main.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  let token = '';
+  try { token = sessionStorage.getItem('agroai-admin') || ''; } catch (e) {}
+  let data = null;
+  let tab = 'farmers';
+
+  const STATUSES = {
+    farmers: ['pending', 'verified', 'rejected'],
+    leads: ['new', 'in_progress', 'won', 'lost'],
+    requests: ['new', 'in_progress', 'deal', 'lost'],
+  };
+  const fmtDate = (s) => new Date(s).toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' });
+
+  async function api(path, opts = {}) {
+    const res = await fetch(path, {
+      ...opts,
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token, ...(opts.headers || {}) },
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || 'Ошибка');
+    return body;
+  }
+
+  async function load() {
+    data = await api('/api/admin/overview');
+    $('login').hidden = true;
+    $('panel').hidden = false;
+    renderTabs();
+    render();
+  }
+
+  function renderTabs() {
+    const tabs = [['farmers', 'Аграрии'], ['requests', 'Запросы покупателей'], ['leads', 'Заявки с сайта'], ['offers', 'Предложения']];
+    $('tabs').replaceChildren(...tabs.map(([key, label]) =>
+      el('button', { type: 'button', class: key === tab ? 'active' : '', onclick: () => { tab = key; renderTabs(); render(); } },
+        `${label} (${data[key].length})`)));
+  }
+
+  function statusSelect(collection, row) {
+    const sel = el('select', { onchange: async () => {
+      try {
+        await api(`/api/admin/${collection}/${row.id}`, { method: 'PATCH', body: JSON.stringify({ status: sel.value }) });
+        row.status = sel.value;
+      } catch (err) { alert(err.message); sel.value = row.status; }
+    } }, STATUSES[collection].map((s) => el('option', { value: s }, s)));
+    sel.value = row.status;
+    return sel;
+  }
+
+  const farmerById = () => new Map(data.farmers.map((f) => [f.id, f]));
+  const offerById = () => new Map(data.offers.map((o) => [o.id, o]));
+
+  function render() {
+    const rows = [...data[tab]].reverse();
+    let head = [];
+    let body = [];
+    if (tab === 'farmers') {
+      head = ['Дата', 'Код', 'Хозяйство', 'Контакт', 'Страна', 'Сертификаты', 'Цели', 'Статус'];
+      body = rows.map((f) => [fmtDate(f.createdAt), f.supplierCode, [el('b', {}, f.company), el('div', { class: 'muted' }, f.hectares ? `${f.hectares} га · учёт: ${f.hasErp}` : `учёт: ${f.hasErp}`)],
+        [f.contactName, el('div', { class: 'muted' }, f.email), el('div', { class: 'muted' }, f.phone)],
+        [f.country, f.region].filter(Boolean).join(', '),
+        f.certifications.map((c) => LABELS.cert[c] || c).join(', ') || '—',
+        f.goals.join(', ') || '—', statusSelect('farmers', f)]);
+    } else if (tab === 'requests') {
+      const farmers = farmerById();
+      const offers = offerById();
+      head = ['Дата', 'Покупатель', 'Продукт', 'Поставщик', 'Объём', 'Куда', 'Сообщение', 'Статус'];
+      body = rows.map((r) => {
+        const f = farmers.get(r.farmerId);
+        const o = offers.get(r.offerId);
+        return [fmtDate(r.createdAt), [el('b', {}, r.buyerCompany), el('div', {}, r.buyerName), el('div', { class: 'muted' }, r.buyerEmail)],
+          o ? o.product : '—', f ? [f.company, el('div', { class: 'muted' }, f.email)] : '—',
+          r.quantity || '—', r.destination || '—', r.message || '—', statusSelect('requests', r)];
+      });
+    } else if (tab === 'leads') {
+      head = ['Дата', 'Имя', 'Компания', 'Контакты', 'Направление', 'Сообщение', 'Статус'];
+      body = rows.map((l) => [fmtDate(l.createdAt), l.name, l.company || '—',
+        [l.email, el('div', { class: 'muted' }, l.phone)], l.direction, l.message || '—', statusSelect('leads', l)]);
+    } else {
+      const farmers = farmerById();
+      head = ['Продукт', 'Категория', 'Объём', 'Сезон', 'Хозяйство', 'Статус хозяйства'];
+      body = rows.map((o) => {
+        const f = farmers.get(o.farmerId);
+        return [o.product, LABELS.category[o.category] || o.category, o.volume ? `${o.volume} ${LABELS.unit[o.unit]}` : '—',
+          o.season || '—', f ? f.company : '—', f ? el('span', { class: `status status-${f.status}` }, f.status) : '—'];
+      });
+    }
+    $('table').replaceChildren(
+      el('thead', {}, el('tr', {}, head.map((h) => el('th', {}, h)))),
+      el('tbody', {}, body.length ? body.map((cells) => el('tr', {}, cells.map((c) => el('td', {}, c))))
+        : el('tr', {}, el('td', { colspan: head.length, class: 'muted' }, 'Пока пусто'))),
+    );
+  }
+
+  $('login').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    token = $('token').value;
+    try {
+      await load();
+      try { sessionStorage.setItem('agroai-admin', token); } catch (err) {}
+    } catch (err) {
+      showMsg($('login').querySelector('.form-msg'), err.message, false);
+    }
+  });
+
+  if (token) load().catch(() => {});
+</script>
+</body>
+</html>

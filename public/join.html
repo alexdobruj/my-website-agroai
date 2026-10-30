@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрация аграриев — AgroAI Holding</title>
+  <meta name="description" content="Зарегистрируйте хозяйство в базе аграриев AgroAI: доступ к экспортным покупателям, маркетплейсам и закрытой B2B-площадке.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container" style="max-width:920px">
+    <div class="section-head">
+      <span class="eyebrow">База аграриев</span>
+      <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Регистрация хозяйства</h1>
+      <p class="lead">После проверки ваши предложения появятся на закрытой площадке для оптовых покупателей. Контакты покупатели не видят — все запросы идут через нас.</p>
+    </div>
+
+    <form id="farmer-form" class="form">
+      <fieldset>
+        <legend>Хозяйство</legend>
+        <div class="form">
+          <div class="form-row">
+            <div><label for="f-company">Название хозяйства / компании *</label><input id="f-company" name="company" required maxlength="150"></div>
+            <div><label for="f-contact">Контактное лицо *</label><input id="f-contact" name="contactName" required maxlength="100"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="f-email">Email *</label><input id="f-email" name="email" type="email" required maxlength="150"></div>
+            <div><label for="f-phone">Телефон / WhatsApp</label><input id="f-phone" name="phone" maxlength="40"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="f-country">Страна *</label><input id="f-country" name="country" required maxlength="60"></div>
+            <div><label for="f-region">Регион / район</label><input id="f-region" name="region" maxlength="100"></div>
+          </div>
+          <div class="form-row">
+            <div><label for="f-ha">Площадь, га</label><input id="f-ha" name="hectares" type="number" min="0"></div>
+            <div>
+              <label for="f-export">Опыт экспорта</label>
+              <select id="f-export" name="exportExperience">
+                <option value="none">Нет</option>
+                <option value="some">Были разовые поставки</option>
+                <option value="regular">Экспортируем регулярно</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="f-erp">Как ведёте учёт</label>
+            <select id="f-erp" name="hasErp">
+              <option value="none">В тетради / в голове</option>
+              <option value="excel">Excel / Google-таблицы</option>
+              <option value="erp">Учётная или ERP-система</option>
+            </select>
+          </div>
+          <div>
+            <label>Сертификаты</label>
+            <div class="checks">
+              <label><input type="checkbox" name="certifications" value="globalgap"> GlobalG.A.P.</label>
+              <label><input type="checkbox" name="certifications" value="organic"> Organic</label>
+              <label><input type="checkbox" name="certifications" value="haccp"> HACCP</label>
+              <label><input type="checkbox" name="certifications" value="iso22000"> ISO 22000</label>
+              <label><input type="checkbox" name="certifications" value="brc"> BRC</label>
+              <label><input type="checkbox" name="certifications" value="ifs"> IFS</label>
+              <label><input type="checkbox" name="certifications" value="halal"> Halal</label>
+              <label><input type="checkbox" name="certifications" value="kosher"> Kosher</label>
+              <label><input type="checkbox" name="certifications" value="fda"> FDA registration</label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Продукция</legend>
+        <div id="products"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="add-product">+ Добавить продукт</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Что вам интересно</legend>
+        <div class="checks">
+          <label><input type="checkbox" name="goals" value="export"> Экспорт</label>
+          <label><input type="checkbox" name="goals" value="marketplaces"> Продажи на Amazon / маркетплейсах</label>
+          <label><input type="checkbox" name="goals" value="b2b"> Оптовые покупатели</label>
+          <label><input type="checkbox" name="goals" value="erp"> Внедрение учёта / ERP</label>
+          <label><input type="checkbox" name="goals" value="certification"> Сертификация</label>
+          <label><input type="checkbox" name="goals" value="financing"> Финансирование / гранты</label>
+        </div>
+        <div style="margin-top:16px"><label for="f-comment">Комментарий</label><textarea id="f-comment" name="comment" maxlength="2000"></textarea></div>
+      </fieldset>
+
+      <div class="checks"><label><input type="checkbox" name="consent" required> Согласен(на) на обработку персональных данных для подбора покупателей и связи со мной *</label></div>
+      <button class="btn btn-primary" type="submit">Отправить анкету</button>
+      <div class="form-msg" role="status"></div>
+    </form>
+  </div>
+</main>
+
+<template id="product-tpl">
+  <div class="product-row">
+    <div><label>Продукт *</label><input name="product" maxlength="100" placeholder="напр. грецкий орех"></div>
+    <div>
+      <label>Категория</label>
+      <select name="category">
+        <option value="grain">Зерновые</option>
+        <option value="oilseeds">Масличные</option>
+        <option value="fruits">Фрукты, ягоды</option>
+        <option value="vegetables">Овощи</option>
+        <option value="nuts">Орехи</option>
+        <option value="dried">Сухофрукты</option>
+        <option value="honey">Мёд</option>
+        <option value="oil">Масла</option>
+        <option value="wine">Вино</option>
+        <option value="processed">Переработка (консервы, соки…)</option>
+        <option value="other">Другое</option>
+      </select>
+    </div>
+    <div><label>Объём / год</label><input name="volume" type="number" min="0" step="any"></div>
+    <div>
+      <label>Ед.</label>
+      <select name="unit"><option value="t">т</option><option value="kg">кг</option><option value="l">л</option><option value="pcs">шт</option></select>
+    </div>
+    <div><label>Сезон</label><input name="season" maxlength="60" placeholder="сен–ноя"></div>
+    <button type="button" class="remove" title="Удалить">✕</button>
+  </div>
+</template>
+
+<footer id="site-footer"></footer>
+<script src="/js/main.js"></script>
+<script>
+  const productsEl = document.getElementById('products');
+  const tpl = document.getElementById('product-tpl');
+  function addProduct() {
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    node.querySelector('.remove').addEventListener('click', () => {
+      if (productsEl.children.length > 1) node.remove();
+    });
+    productsEl.appendChild(node);
+  }
+  document.getElementById('add-product').addEventListener('click', () => {
+    if (productsEl.children.length < 10) addProduct();
+  });
+  addProduct();
+
+  const form = document.getElementById('farmer-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const data = {
+      company: fd.get('company'),
+      contactName: fd.get('contactName'),
+      email: fd.get('email'),
+      phone: fd.get('phone'),
+      country: fd.get('country'),
+      region: fd.get('region'),
+      hectares: fd.get('hectares'),
+      exportExperience: fd.get('exportExperience'),
+      hasErp: fd.get('hasErp'),
+      certifications: fd.getAll('certifications'),
+      goals: fd.getAll('goals'),
+      comment: fd.get('comment'),
+      consent: fd.get('consent') === 'on',
+      products: [...productsEl.children].map((row) => ({
+        product: row.querySelector('[name=product]').value,
+        category: row.querySelector('[name=category]').value,
+        volume: row.querySelector('[name=volume]').value,
+        unit: row.querySelector('[name=unit]').value,
+        season: row.querySelector('[name=season]').value,
+      })),
+    };
+    const msg = form.querySelector('.form-msg');
+    const btn = form.querySelector('[type=submit]');
+    btn.disabled = true;
+    try {
+      await postJSON('/api/farmers', data);
+      form.reset();
+      productsEl.innerHTML = '';
+      addProduct();
+      showMsg(msg, 'Анкета отправлена! Мы проверим данные и свяжемся с вами.', true);
+    } catch (err) {
+      showMsg(msg, err.message, false);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
